@@ -42,7 +42,13 @@ self.addEventListener("install", (event) => {
 
     event.waitUntil(
         Promise.all([cacheStatic, cacheInmutable])
-            .then((data) => console.log("data", data))
+            .then((data) => {
+                try {
+                    console.log("data", data);
+                } catch (error) {
+                    console.log("error trycatch", error);
+                }
+            })
             .catch((err) => console.log("err", err))
     );
 });
