@@ -93,7 +93,7 @@ self.addEventListener("fetch", (event) => {
 
 // This variable will save the event for later use.
 let defferedPrompt;
-const addbtn = document.querySelector(".btn");
+const addbtn = window.document.querySelector(".btn");
 
 window.addEventListener("beforeinstallprompt", (event) => {
     event.preventDefault();
