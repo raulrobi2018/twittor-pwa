@@ -40,7 +40,9 @@ self.addEventListener("install", (event) => {
         cache.addAll(APP_SHELL_INMUTABLE);
     });
 
-    event.waitUntil(Promise.all([cacheStatic, cacheInmutable]));
+    event.waitUntil(
+        Promise.all([cacheStatic, cacheInmutable]).catch((err) => console.log)
+    );
 });
 
 //Borrar caches obsoletos
