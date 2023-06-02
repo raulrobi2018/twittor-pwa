@@ -125,7 +125,7 @@ postBtn.on("click", function () {
 
 // This variable will save the event for later use.
 let defferedPrompt;
-const addbtn = document.querySelector(".btn");
+const addbtn = document.getElementById("install-button");
 
 window.addEventListener("beforeinstallprompt", (event) => {
     event.preventDefault();
