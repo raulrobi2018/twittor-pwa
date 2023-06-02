@@ -6,8 +6,8 @@ const INMUTABLE_CACHE = "inmutable-v1";
 
 //Aquí se declara todo lo que es de mi aplicación
 const APP_SHELL = [
-    "/",
-    "/index.html"
+    "/"
+    // "/index.html",
     // "/css/style.css",
     // "/img/favicon.ico",
     // "/img/avatars/spiderman.jpg",
@@ -24,20 +24,24 @@ const APP_SHELL_INMUTABLE = [
     "https://fonts.googleapis.com/css?family=Quicksand:300,400",
     "https://fonts.googleapis.com/css?family=Lato:400,300",
     "https://use.fontawesome.com/releases/v5.3.1/css/all.css",
-    "/css/animate.css",
-    "/js/libs/jquery.js"
+    "css/animate.css",
+    "js/libs/jquery.js"
 ];
 
 //Agregar caches
 self.addEventListener("install", (event) => {
     const cacheStatic = caches.open(STATIC_CACHE).then((cache) => {
         console.log("Add all 1");
-        cache.addAll(APP_SHELL).catch((err) => console.log(err));
+        cache
+            .addAll(APP_SHELL)
+            .catch((err) => console.log("static cache", err));
     });
 
     const cacheInmutable = caches.open(INMUTABLE_CACHE).then((cache) => {
         console.log("Add all 2");
-        cache.addAll(APP_SHELL_INMUTABLE).catch((err) => console.log(err));
+        cache
+            .addAll(APP_SHELL_INMUTABLE)
+            .catch((err) => console.log("inmutable cache", err));
     });
 
     event.waitUntil(
