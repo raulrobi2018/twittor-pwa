@@ -128,13 +128,16 @@ let defferedPrompt;
 const addbtn = document.getElementById("install-button");
 
 window.addEventListener("beforeinstallprompt", (event) => {
+    console.log("before intall prompt");
     event.preventDefault();
     defferedPrompt = event;
     addbtn.style.display = "block";
 });
 
 addbtn.addEventListener("click", (event) => {
+    console.log("antes del prompt");
     defferedPrompt.prompt();
+    console.log("despues del prompt");
 
     defferedPrompt.userChoice.then((choice) => {
         if (choice.outcome === "accepted") {
