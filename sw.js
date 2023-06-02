@@ -92,15 +92,22 @@ self.addEventListener("fetch", (event) => {
 });
 
 // This variable will save the event for later use.
-let deferredPrompt;
-self.addEventListener("beforeinstallprompt", (e) => {
-    // Prevents the default mini-infobar or install dialog from appearing on mobile
-    e.preventDefault();
-    // Save the event because you'll need to trigger it later.
-    deferredPrompt = e;
-    // Show your customized install prompt for your PWA
-    // Your own UI doesn't have to be a single element, you
-    // can have buttons in different locations, or wait to prompt
-    // as part of a critical journey.
-    showInAppInstallPromotion();
+let defferedPrompt;
+const addbtn = document.querySelector(".btn");
+
+window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    defferedPrompt = event;
+    addbtn.style.display = "block";
+});
+
+addbtn.addEventListener("click", (event) => {
+    defferedPrompt.prompt();
+
+    defferedPrompt.userChoice.then((choice) => {
+        if (choice.outcome === "accepted") {
+            console.log("user accepted the prompt");
+        }
+        defferedPrompt = null;
+    });
 });
