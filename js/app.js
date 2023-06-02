@@ -3,8 +3,11 @@ var swLocation = "/twittor-pwa/sw.js";
 
 if (navigator.serviceWorker) {
     if (url.includes("localhost")) {
+        console.log("localhost");
         swLocation = "/sw.js";
     }
+
+    console.log("url", swLocation);
     navigator.serviceWorker.register(swLocation);
 }
 
