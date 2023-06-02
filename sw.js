@@ -7,25 +7,25 @@ const INMUTABLE_CACHE = "inmutable-v1";
 //Aquí se declara todo lo que es de mi aplicación
 const APP_SHELL = [
     "/",
-    "/index.html",
-    "/css/style.css",
-    "/img/favicon.ico",
-    "/img/avatars/spiderman.jpg",
-    "/img/avatars/hulk.jpg",
-    "/img/avatars/ironman.jpg",
-    "/img/avatars/thor.jpg",
-    "/img/avatars/wolverine.jpg",
-    "/js/app.js",
-    "/js/sw-utils.js"
+    "/index.html"
+    // "/css/style.css",
+    // "/img/favicon.ico",
+    // "/img/avatars/spiderman.jpg",
+    // "/img/avatars/hulk.jpg",
+    // "/img/avatars/ironman.jpg",
+    // "/img/avatars/thor.jpg",
+    // "/img/avatars/wolverine.jpg",
+    // "/js/app.js",
+    // "/js/sw-utils.js"
 ];
 
 //Aquí va todo lo que no se va a modificar jamás
 const APP_SHELL_INMUTABLE = [
     "https://fonts.googleapis.com/css?family=Quicksand:300,400",
     "https://fonts.googleapis.com/css?family=Lato:400,300",
-    "https://use.fontawesome.com/releases/v5.3.1/css/all.css",
-    "/css/animate.css",
-    "/js/libs/jquery.js"
+    "https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+    // "/css/animate.css",
+    // "/js/libs/jquery.js"
 ];
 
 //Agregar caches
