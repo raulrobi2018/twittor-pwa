@@ -31,30 +31,14 @@ const APP_SHELL_INMUTABLE = [
 //Agregar caches
 self.addEventListener("install", (event) => {
     const cacheStatic = caches.open(STATIC_CACHE).then((cache) => {
-        console.log("Add all 1");
-        cache
-            .addAll(APP_SHELL)
-            .catch((err) => console.log("static cache", err));
+        cache.addAll(APP_SHELL);
     });
 
     const cacheInmutable = caches.open(INMUTABLE_CACHE).then((cache) => {
-        console.log("Add all 2");
-        cache
-            .addAll(APP_SHELL_INMUTABLE)
-            .catch((err) => console.log("inmutable cache", err));
+        cache.addAll(APP_SHELL_INMUTABLE);
     });
 
-    event.waitUntil(
-        Promise.all([cacheStatic, cacheInmutable])
-            .then((data) => {
-                try {
-                    console.log("data", data);
-                } catch (error) {
-                    console.log("error trycatch", error);
-                }
-            })
-            .catch((err) => console.log("err", err))
-    );
+    event.waitUntil(Promise.all([cacheStatic, cacheInmutable]));
 });
 
 //Borrar caches obsoletos
