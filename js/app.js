@@ -3,11 +3,9 @@ var swLocation = "/twittor-pwa/sw.js";
 
 if (navigator.serviceWorker) {
     if (url.includes("localhost")) {
-        console.log("localhost");
         swLocation = "/sw.js";
     }
 
-    console.log("url", swLocation);
     navigator.serviceWorker.register(swLocation);
 }
 
@@ -130,8 +128,11 @@ const addbtn = document.getElementById("install-button");
 window.addEventListener("beforeinstallprompt", (event) => {
     console.log("before intall prompt");
     event.preventDefault();
+    console.log("despuest de prevent");
     defferedPrompt = event;
+    console.log("antes de block");
     addbtn.style.display = "block";
+    console.log("despuest de block");
 });
 
 addbtn.addEventListener("click", (event) => {
