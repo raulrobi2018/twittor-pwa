@@ -21,6 +21,7 @@ var timeline = $("#timeline");
 
 var modal = $("#modal");
 var modalAvatar = $("#modal-avatar");
+var modalAvatar = $("#modal-install-app");
 var avatarBtns = $(".seleccion-avatar");
 var txtMensaje = $("#txtMensaje");
 
