@@ -98,17 +98,19 @@ nuevoBtn.on("click", function () {
 
 // Boton de cancelar mensaje
 cancelarBtn.on("click", function () {
-    modal.animate(
-        {
-            marginTop: "+=1000px",
-            opacity: 0
-        },
-        200,
-        function () {
-            modal.addClass("oculto");
-            txtMensaje.val("");
-        }
-    );
+    if (!modal.hasClass("oculto")) {
+        modal.animate(
+            {
+                marginTop: "+=1000px",
+                opacity: 0
+            },
+            200,
+            function () {
+                modal.addClass("oculto");
+                txtMensaje.val("");
+            }
+        );
+    }
 });
 
 // Boton de enviar mensaje
@@ -118,6 +120,22 @@ postBtn.on("click", function () {
         cancelarBtn.click();
         return;
     }
+
+    const data = {
+        mensaje: mensaje,
+        user: usuario
+    };
+
+    fetch("api", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+        .then((resp) => resp.json())
+        .then((resp) => console.log("app.js", resp))
+        .catch((err) => console.log("app.js err", err));
 
     crearMensajeHTML(mensaje, usuario);
 });
@@ -142,3 +160,40 @@ addbtn.addEventListener("click", (event) => {
         defferedPrompt = null;
     });
 });
+
+//Obtener mensajes del servidor
+const getMessages = () => {
+    fetch("api")
+        .then((resp) => resp.json())
+        .then((messages) => {
+            console.log("Messages", messages);
+            messages.forEach((message) => {
+                crearMensajeHTML(message.message, message.user);
+            });
+        });
+};
+
+getMessages();
+
+//Detectar cambios de conexión
+const isOnline = () => {
+    if (navigator.onLine) {
+        //Hay conexión
+        $.mdtoast("Online", {
+            interaction: true,
+            interactionTimeout: 1000,
+            actionText: "OK!"
+        });
+    } else {
+        //No hay conexión
+        $.mdtoast("Offline", {
+            interaction: true,
+            actionText: "OK!"
+        });
+    }
+};
+
+window.addEventListener("online", isOnline);
+window.addEventListener("offline", isOnline);
+
+isOnline();
