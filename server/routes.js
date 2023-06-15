@@ -31,4 +31,23 @@ router.post("/", function (req, res) {
         message
     });
 });
+
+//Almacenar subscripcion
+router.post("/subscribe", (req, res) => {
+    res.json("subscribe");
+});
+
+//Obtener el key publico
+router.get("/key", (req, res) => {
+    res.json("key publico");
+});
+
+//Enviar notificación push a usuarios que queramos
+//Normalmente NO se maneja con un servicio rest, NO es un servicio que
+//esté expuesto, se maneja del lado del servidor
+//Aquí es con fines educativos para poder utilizar postman
+router.post("/push", (req, res) => {
+    res.json("Push notification");
+});
+
 module.exports = router;

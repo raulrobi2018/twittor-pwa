@@ -25,6 +25,9 @@ var modalAvatar = $("#modal-install-app");
 var avatarBtns = $(".seleccion-avatar");
 var txtMensaje = $("#txtMensaje");
 
+var btnActivadas = $(".btn-noti-activadas");
+var btnDesactivadas = $(".btn-noti-desactivadas");
+
 // El usuario, contiene el ID del héroe seleccionado
 var usuario;
 
@@ -197,3 +200,53 @@ window.addEventListener("online", isOnline);
 window.addEventListener("offline", isOnline);
 
 isOnline();
+
+const verifySubscription = (activated) => {
+    if (activated) {
+        btnActivadas.removeClass("oculto");
+        btnDesactivadas.addClass("oculto");
+    } else {
+        btnActivadas.addClass("oculto");
+        btnDesactivadas.removeClass("oculto");
+    }
+};
+
+verifySubscription();
+
+const sendNotification = () => {
+    const notificationOptions = {
+        body: "Notification content",
+        icon: "img/icons/icon-72x72.png"
+    };
+    const noti = new Notification("I'm the notification", notificationOptions);
+
+    noti.onclick = () => {
+        console.log("Notification click");
+    };
+};
+
+//Notifications
+const notifyMe = () => {
+    if (!window.Notification) {
+        console.log("This navigator doesn't support notifications");
+        return;
+    }
+
+    //Si anteriormente ya se asignó permisos
+    if (Notification.permission === "granted") {
+        sendNotification();
+    } else if (
+        Notification.permission !== "denied" ||
+        Notification.permission === "default"
+    ) {
+        Notification.requestPermission((permission) => {
+            console.log("Permission", permission);
+
+            if (permission === "granted") {
+                sendNotification();
+            }
+        });
+    }
+};
+
+notifyMe();
