@@ -108,3 +108,68 @@ self.addEventListener("sync", (event) => {
         event.waitUntil();
     }
 });
+
+//Escuchar push notifications
+self.addEventListener("push", (event) => {
+    const data = JSON.parse(event.data.text());
+
+    const {title, body, user} = data;
+
+    const options = {
+        body: body,
+        icon: `img/avatars/${user}.jpg`,
+        badge: "img/favicon.ico",
+        image: "https://i.pinimg.com/originals/00/06/eb/0006ebfbda517a193bba14471b03d23f.jpg",
+        vibrate: [
+            125, 75, 125, 275, 200, 275, 125, 75, 125, 275, 200, 600, 200, 600
+        ],
+        openUrl: "/",
+        data: {
+            url: "/",
+            id: data.user
+        },
+        actions: [
+            {
+                action: "thor-action",
+                title: "Thor",
+                icon: "img/avatar/thor.jpg"
+            },
+            {
+                action: "spiderman-action",
+                title: "Spiderman",
+                icon: "img/avatar/spiderman.jpg"
+            }
+        ]
+    };
+    //Espero a que la notificación haga todo lo que tiene que hacer
+    event.waitUntil(self.registration.showNotification(title, options));
+});
+
+//Evento para controlar cuando se cierra la notificación
+self.addEventListener("notificationclose", (event) => {
+    console.log("Notification closed", event);
+});
+
+//Evento para controlar click de la notificación
+self.addEventListener("notificationclick", (event) => {
+    const notification = event.notification;
+    const action = event.action;
+
+    const resp = clients.matchAll().then((clients) => {
+        let client = clients.find((c) => {
+            return c.visibilityState === "visible";
+        });
+
+        //Si hay pestaña de la app abierta, lo redirige hacia ahí, sino abre una nueva
+        if (client !== undefined) {
+            client.navigate(notification.data.url);
+            client.focus();
+        } else {
+            clients.openWindow(notification.data.url);
+        }
+        return notification.close();
+    });
+
+    //Espero a que se realice la tarea
+    event.waitUntil(resp);
+});

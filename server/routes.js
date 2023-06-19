@@ -1,6 +1,8 @@
 // Routes.js - Módulo de rutas
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
+const push = require("./push");
+const webpush = require("web-push");
 
 const messages = [
     {
@@ -34,12 +36,19 @@ router.post("/", function (req, res) {
 
 //Almacenar subscripcion
 router.post("/subscribe", (req, res) => {
+    const subscription = req.body;
+
+    push.addSubscription(subscription);
+
     res.json("subscribe");
 });
 
 //Obtener el key publico
 router.get("/key", (req, res) => {
-    res.json("key publico");
+    const key = push.getKey();
+
+    //Enviamos directamente lo que tenemos en key
+    res.send(key);
 });
 
 //Enviar notificación push a usuarios que queramos
@@ -47,7 +56,15 @@ router.get("/key", (req, res) => {
 //esté expuesto, se maneja del lado del servidor
 //Aquí es con fines educativos para poder utilizar postman
 router.post("/push", (req, res) => {
-    res.json("Push notification");
+    const post = {
+        title: req.body.title,
+        body: req.body.body,
+        user: req.body.user
+    };
+
+    push.sendPush(post);
+
+    res.json(post);
 });
 
 module.exports = router;

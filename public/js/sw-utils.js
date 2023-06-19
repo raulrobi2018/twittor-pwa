@@ -27,7 +27,13 @@ const updateStaticCache = (staticCache, req, APP_SHELL_INMUTABLE) => {
 
 //Network with cache fallback strategy
 const manejoApiMensajes = (cacheName, req) => {
-    if (req.clone().method === "POST") {
+    //No quiero almacenar en cache el key o la subscripción, por eso lo retorno tal cual es solicitado
+    if (
+        req.url.indexOf("/api/key") >= 0 ||
+        req.url.indexOf("/api/subscribe") >= 0
+    ) {
+        return fetch(req);
+    } else if (req.clone().method === "POST") {
         //Post a new message
 
         if (self.registration.sync) {

@@ -72,6 +72,7 @@
         "$"     : true,
         "self"  : true,
         "caches": true,
-        "importScripts": true
+        "importScripts": true,
+        "clients": true
     }
 }

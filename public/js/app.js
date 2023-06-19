@@ -1,12 +1,22 @@
 var url = window.location.href;
-var swLocation = "/twittor-pwa/public/sw.js";
+var swLocation = "/twittor-pwa/sw.js";
+
+var swRegistry;
 
 if (navigator.serviceWorker) {
     if (url.includes("localhost")) {
         swLocation = "/sw.js";
     }
 
-    navigator.serviceWorker.register(swLocation);
+    //Se va a registrar el service worker cuando la página esté totalmente cargada
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register(swLocation).then((reg) => {
+            //Asigno el registro del service worker
+            swRegistry = reg;
+            //Inmediatamente confirmo si ya esta subscripto
+            swRegistry.pushManager.getSubscription().then(verifySubscription);
+        });
+    });
 }
 
 // Referencias de jQuery
@@ -202,6 +212,7 @@ window.addEventListener("offline", isOnline);
 isOnline();
 
 const verifySubscription = (activated) => {
+    console.log(activated);
     if (activated) {
         btnActivadas.removeClass("oculto");
         btnDesactivadas.addClass("oculto");
@@ -210,8 +221,6 @@ const verifySubscription = (activated) => {
         btnDesactivadas.removeClass("oculto");
     }
 };
-
-verifySubscription();
 
 const sendNotification = () => {
     const notificationOptions = {
@@ -249,4 +258,47 @@ const notifyMe = () => {
     }
 };
 
-notifyMe();
+//notifyMe();
+
+const getPublicKey = () => {
+    return fetch("api/key")
+        .then((res) => res.arrayBuffer())
+        .then((key) => new Uint8Array(key));
+};
+
+//Evento click del botón de desactivar notificaciones
+btnDesactivadas.on("click", () => {
+    if (!swRegistry) {
+        return console.log("No hay registro del SW");
+    }
+
+    getPublicKey().then((key) => {
+        swRegistry.pushManager
+            .subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: key
+            })
+            .then((res) => res.toJSON())
+            .then((subscription) => {
+                fetch("api/subscribe", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(subscription)
+                })
+                    .then(verifySubscription)
+                    .catch(cancelSubscription);
+            });
+    });
+});
+
+const cancelSubscription = () => {
+    swRegistry.pushManager.getSubscription().then((subscription) => {
+        subscription.unsubscribe().then(() => verifySubscription(false));
+    });
+};
+
+btnActivadas.on("click", () => {
+    cancelSubscription();
+});
