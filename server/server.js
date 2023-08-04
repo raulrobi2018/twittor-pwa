@@ -8,7 +8,8 @@ const publicPath = path.resolve(__dirname, "../public");
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json()); // support json encoded bodies
-app.use(bodyParser.urlencoded({extended: true})); // support encoded bodies
+app.use(express.json({limit: "50mb"}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true})); // support encoded bodies
 
 //Enable CORS
 // app.use((req, res, next) => {

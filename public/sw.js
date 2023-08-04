@@ -3,7 +3,7 @@ importScripts("https://cdn.jsdelivr.net/npm/pouchdb@8.0.1/dist/pouchdb.min.js");
 importScripts("js/sw-db.js");
 importScripts("js/sw-utils.js");
 
-const STATIC_CACHE = "static-v4";
+const STATIC_CACHE = "static-v5";
 const DYNAMIC_CACHE = "dynamic-v2";
 const INMUTABLE_CACHE = "inmutable-v1";
 
@@ -19,6 +19,7 @@ const APP_SHELL = [
     "img/avatars/thor.jpg",
     "img/avatars/wolverine.jpg",
     "js/app.js",
+    "js/camera-class.js",
     "js/sw-utils.js",
     "js/libs/plugins/mdtoast.min.js",
     "js/libs/plugins/mdtoast.min.css"
@@ -67,6 +68,8 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
     let resp;
 
+    if (!event.request.url.includes("http")) return;
+
     //Network with cache fallback
     if (event.request.url.includes("/api")) {
         resp = manejoApiMensajes(DYNAMIC_CACHE, event.request);
@@ -105,7 +108,7 @@ self.addEventListener("sync", (event) => {
         //Grabar en DB cuando hay conexión
         const resp = postMessages();
 
-        event.waitUntil();
+        event.waitUntil(resp);
     }
 });
 

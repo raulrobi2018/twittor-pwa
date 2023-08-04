@@ -42,7 +42,6 @@ const manejoApiMensajes = (cacheName, req) => {
                 .clone()
                 .text()
                 .then((body) => {
-                    console.log("body", body);
                     const bodyObj = JSON.parse(body);
                     return saveMessage(bodyObj);
                 });
